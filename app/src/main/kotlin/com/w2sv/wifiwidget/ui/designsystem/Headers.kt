@@ -16,6 +16,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -25,7 +26,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 @Composable
 fun BackButtonHeaderWithBottomDivider(
@@ -51,9 +51,8 @@ fun BackButtonHeaderWithBottomDivider(
             Spacer(modifier = Modifier.width(10.dp))
             Text(
                 text = title,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = MaterialTheme.colorScheme.secondary,
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1
             )
             trailingIcon?.let {
@@ -61,7 +60,10 @@ fun BackButtonHeaderWithBottomDivider(
                 it()
             }
         }
-        HorizontalDivider(modifier = Modifier.padding(top = 14.dp))
+        HorizontalDivider(
+            modifier = Modifier.padding(top = 14.dp),
+            color = MaterialTheme.colorScheme.outlineVariant
+        )
     }
 }
 
@@ -76,25 +78,32 @@ data class IconHeader(@DrawableRes val iconRes: Int, @StringRes val stringRes: I
 fun IconHeader(properties: IconHeader, modifier: Modifier = Modifier) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
+        modifier = modifier.fillMaxWidth()
     ) {
         Box(modifier = Modifier.weight(0.3f), contentAlignment = Alignment.Center) {
-            Icon(
-                painter = painterResource(id = properties.iconRes),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.tertiary,
-                modifier = Modifier.size(24.dp)
-            )
+            Surface(
+                shape = MaterialTheme.shapes.medium,
+                color = MaterialTheme.colorScheme.tertiaryContainer
+            ) {
+                Icon(
+                    painter = painterResource(id = properties.iconRes),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onTertiaryContainer,
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .size(24.dp)
+                )
+            }
         }
-        Box(Modifier.weight(0.7f), contentAlignment = Alignment.Center) {
+        Box(Modifier.weight(0.7f), contentAlignment = Alignment.CenterStart) {
             Text(
                 text = stringResource(id = properties.stringRes),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.tertiary
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
-        Box(modifier = Modifier.weight(0.3f), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.weight(0.3f), contentAlignment = Alignment.CenterEnd) {
             properties.trailingIcon?.invoke()
         }
     }

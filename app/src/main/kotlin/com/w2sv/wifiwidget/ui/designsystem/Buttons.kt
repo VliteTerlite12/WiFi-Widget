@@ -8,7 +8,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -24,15 +23,20 @@ fun DialogButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
+        shape = MaterialTheme.shapes.medium,
         border = if (enabled) {
-            BorderStroke(Dp.Hairline, contentColor)
+            BorderStroke(1.dp, contentColor.copy(alpha = 0.2f))
         } else {
             null
         },
-        elevation = ButtonDefaults.elevatedButtonElevation(8.dp),
+        elevation = ButtonDefaults.elevatedButtonElevation(
+            defaultElevation = 1.dp,
+            pressedElevation = 4.dp,
+            disabledElevation = 0.dp
+        ),
         colors = ButtonDefaults.elevatedButtonColors(contentColor = contentColor, containerColor = containerColor)
     ) {
-        Text(text = text)
+        Text(text = text, style = MaterialTheme.typography.labelLarge)
     }
 }
 
@@ -48,7 +52,7 @@ fun HighlightedDialogButton(
         onClick = onClick,
         enabled = enabled,
         modifier = modifier,
-        containerColor = MaterialTheme.colorScheme.primaryContainer,
-        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+        contentColor = MaterialTheme.colorScheme.onTertiaryContainer
     )
 }

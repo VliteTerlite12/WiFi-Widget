@@ -31,6 +31,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
@@ -48,7 +49,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.w2sv.androidutils.content.openUrl
 import com.w2sv.common.AppUrl
 import com.w2sv.composed.core.extensions.thenIfNotNull
@@ -99,6 +99,8 @@ private fun NavigationDrawerSheet(
     ModalDrawerSheet(
         drawerState = drawerState,
         modifier = modifier,
+        drawerContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+        drawerTonalElevation = 6.dp,
         windowInsets = WindowInsets()
     ) {
         val elements = remember { navigationDrawerElements() }
@@ -119,7 +121,8 @@ private fun NavigationDrawerSheet(
                 HorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = NavigationDrawerToken.topPadding)
+                        .padding(top = NavigationDrawerToken.topPadding),
+                    color = MaterialTheme.colorScheme.outlineVariant
                 )
             }
             items(elements, key = { it.hashCode() }, contentType = { it::class }) { element ->
@@ -145,17 +148,25 @@ private fun Header(modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        Image(
-            painter = painterResource(id = R.drawable.logo_foreground),
-            contentDescription = null,
-            modifier = Modifier
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primary)
-                .bouncyClickable()
-        )
+        Surface(
+            shape = CircleShape,
+            color = MaterialTheme.colorScheme.primaryContainer
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.logo_foreground),
+                contentDescription = null,
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .padding(18.dp)
+                    .bouncyClickable()
+            )
+        }
         Spacer(modifier = Modifier.height(22.dp))
         Text(
             text = stringResource(id = R.string.version).format(BuildConfig.VERSION_NAME),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.clickable(
                 onClick = { context.openUrl(AppUrl.RELEASE_OVERVIEW) },
                 onClickLabel = stringResource(R.string.open_release_overview_cd)
@@ -221,8 +232,9 @@ private fun GroupHeader(@StringRes titleRes: Int, modifier: Modifier = Modifier)
     Text(
         text = stringResource(id = titleRes),
         modifier = modifier,
-        fontSize = 18.sp,
-        fontWeight = FontWeight.Bold
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.SemiBold,
+        color = MaterialTheme.colorScheme.onSurface
     )
 }
 
@@ -251,8 +263,8 @@ private fun Action(
         central = {
             Text(
                 text = stringResource(action.labelRes),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
                 maxLines = 1
             )
         },

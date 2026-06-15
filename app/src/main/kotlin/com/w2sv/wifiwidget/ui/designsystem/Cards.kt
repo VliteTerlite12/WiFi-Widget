@@ -19,13 +19,18 @@ import androidx.compose.ui.unit.dp
 object AppDefaults {
     val elevatedCardElevation
         @Composable
-        get() = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
+        get() = CardDefaults.elevatedCardElevation(
+            defaultElevation = 2.dp,
+            pressedElevation = 6.dp,
+            focusedElevation = 4.dp,
+            hoveredElevation = 4.dp
+        )
 }
 
 val CardContainerColor: Color
     @Composable
     @ReadOnlyComposable
-    get() = MaterialTheme.colorScheme.surfaceContainer
+    get() = MaterialTheme.colorScheme.surfaceContainerLow
 
 @Composable
 fun ElevatedIconHeaderCard(
@@ -40,6 +45,7 @@ fun ElevatedIconHeaderCard(
     ElevatedCard(
         colors = colors,
         elevation = elevation,
+        shape = MaterialTheme.shapes.large,
         modifier = modifier
     ) {
         Column(
@@ -59,7 +65,8 @@ fun ElevatedIconHeaderCard(
 fun SecondLevelElevatedCard(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
     ElevatedCard(
         elevation = AppDefaults.elevatedCardElevation,
-        colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLowest),
+        colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHighest),
+        shape = MaterialTheme.shapes.medium,
         modifier = modifier,
         content = content
     )
