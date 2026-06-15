@@ -8,9 +8,8 @@ import androidx.work.OutOfQuotaPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.w2sv.domain.model.widget.WidgetRefreshing
-import java.time.Duration
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.time.toJavaDuration
 import slimber.log.i
 
 internal class WifiWidgetWorkScheduler @Inject constructor(private val workManager: WorkManager) {
@@ -18,7 +17,7 @@ internal class WifiWidgetWorkScheduler @Inject constructor(private val workManag
     fun applyRefreshingPolicy(settings: WidgetRefreshing) {
         if (settings.refreshPeriodically) {
             enqueuePeriodicWork(
-                interval = settings.interval.toJavaDuration(),
+                intervalMillis = settings.interval.inWholeMilliseconds,
                 refreshOnLowBattery = settings.refreshOnLowBattery
             )
         } else {
@@ -40,16 +39,19 @@ internal class WifiWidgetWorkScheduler @Inject constructor(private val workManag
         )
     }
 
-    private fun enqueuePeriodicWork(interval: Duration, refreshOnLowBattery: Boolean) {
-        i { "Enqueuing periodic work with interval=$interval, refreshOnLowBattery=$refreshOnLowBattery" }
+    private fun enqueuePeriodicWork(intervalMillis: Long, refreshOnLowBattery: Boolean) {
+        i { "Enqueuing periodic work with intervalMillis=$intervalMillis, refreshOnLowBattery=$refreshOnLowBattery" }
 
-        val request = PeriodicWorkRequestBuilder<WifiWidgetRefreshWorker>(interval)
+        val request = PeriodicWorkRequestBuilder<WifiWidgetRefreshWorker>(
+            intervalMillis,
+            TimeUnit.MILLISECONDS
+        )
             .setConstraints(
                 Constraints.Builder()
                     .setRequiresBatteryNotLow(requiresBatteryNotLow = !refreshOnLowBattery)
                     .build()
             )
-            .setInitialDelay(interval)
+            .setInitialDelay(intervalMillis, TimeUnit.MILLISECONDS)
             .build()
 
         workManager.enqueueUniquePeriodicWork(
