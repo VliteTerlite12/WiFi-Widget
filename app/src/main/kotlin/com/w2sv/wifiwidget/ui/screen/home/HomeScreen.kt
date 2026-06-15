@@ -22,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.w2sv.androidutils.content.openUrl
 import com.w2sv.common.AppUrl
 import com.w2sv.composed.core.isLandscapeModeActive
@@ -56,7 +55,8 @@ fun HomeScreen(
     NavigationDrawer(state = drawerState, themeController = themeController) {
         Scaffold(
             topBar = { NavigationDrawerScreenTopAppBar { scope.launch { drawerState.open() } } },
-            snackbarHost = { AppSnackbarHost(snackbarBuilderFlow) }
+            snackbarHost = { AppSnackbarHost(snackbarBuilderFlow) },
+            containerColor = MaterialTheme.colorScheme.surface
         ) { paddingValues ->
             val wifiStatusCard: ModifierReceivingComposable = rememberMovableContentOf {
                 WifiStatusCard(wifiState = wifiState, modifier = it)
@@ -143,7 +143,7 @@ private fun CopyrightText(modifier: Modifier = Modifier) {
     Text(
         text = remember { "© 2022 - ${Calendar.getInstance().get(Calendar.YEAR)} | W2SV" },
         color = MaterialTheme.colorScheme.onSurfaceVariant,
-        fontSize = 16.sp,
+        style = MaterialTheme.typography.labelMedium,
         modifier = modifier.clickable { context.openUrl(AppUrl.LICENSE) }
     )
 }
