@@ -21,7 +21,7 @@ kotlinxCollectionsImmutable = "0.4.0"
 kotlinxCoroutines = "1.10.2"
 ktlint = "14.2.0"
 # @keep
-minSdk = "25"
+minSdk = "26"
 moduleGraph = "2.9.0"
 profileinstaller = "1.4.1"
 protobuf = "4.34.1"
